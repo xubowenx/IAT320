@@ -1,1 +1,67 @@
 
+#include <Adafruit_CircuitPlayground.h> 
+
+
+void setup() {
+
+  Serial.begin(9600);
+  Serial.println("Circuit Playground test!");
+
+  CircuitPlayground.begin();
+
+}
+
+void loop() {
+ // Some example procedures showing how to display to the pixels:
+
+ 
+  /*if(CircuitPlayground.lightSensor()>=50)  
+  {
+    for(int i=0;i<30;i++)
+    {
+      CircuitPlayground.playTone(261.626, 100, false);
+      delay(50);
+      CircuitPlayground.playTone(293.665, 100, false);
+      delay(50);
+      CircuitPlayground.strip.setPixelColor(i,100, 0, 0); // Red
+    }
+  }
+  else
+  {
+    for(int i=0;i<30;i++)
+    {
+      CircuitPlayground.strip.setPixelColor(i,255, 0, 0); // Red
+    }
+  }*/
+  bool light = false;
+  bool dark = false;
+  
+  Serial.print("X: "); Serial.print(CircuitPlayground.motionX());
+  Serial.print(" \tY: "); Serial.print(CircuitPlayground.motionY());
+  Serial.print(" \tZ: "); Serial.print(CircuitPlayground.motionZ());
+  Serial.println(" m/s^2");
+  delay(10);
+
+  if(CircuitPlayground.motionX()>=50)
+  {
+    if(light)
+    {
+      for(int i=0;i<15;i++)
+        CircuitPlayground.strip.setPixelColor(i,20, 0, 0); 
+      light = false;
+      dark = true;
+    }
+    else
+    {
+      for(int i=0;i<15;i++)
+        CircuitPlayground.strip.setPixelColor(i,150, 0, 0); 
+      light = true;
+      dark = false;
+    }
+  }
+  
+
+
+
+
+}
