@@ -1,7 +1,6 @@
-
 #include <Adafruit_CircuitPlayground.h> 
-
-
+bool light = true;
+bool dark = false;
 void setup() {
 
   Serial.begin(9600);
@@ -33,23 +32,24 @@ void loop() {
       CircuitPlayground.strip.setPixelColor(i,255, 0, 0); // Red
     }
   }*/
-  bool light = false;
-  bool dark = false;
+
   
   Serial.print("X: "); Serial.print(CircuitPlayground.motionX());
   Serial.print(" \tY: "); Serial.print(CircuitPlayground.motionY());
   Serial.print(" \tZ: "); Serial.print(CircuitPlayground.motionZ());
   Serial.println(" m/s^2");
-  delay(10);
+  
 
-  if(CircuitPlayground.motionX()>=50)
+  if(CircuitPlayground.motionX()>=15 || CircuitPlayground.motionX()<=-15 /*|| CircuitPlayground.motionZ()>=15 || CircuitPlayground.motionZ()<=-20*/)
   {
-    if(light)
+    if(light==true && dark==false)
     {
       for(int i=0;i<15;i++)
         CircuitPlayground.strip.setPixelColor(i,20, 0, 0); 
       light = false;
       dark = true;
+      Serial.println("dark");
+      
     }
     else
     {
@@ -57,8 +57,11 @@ void loop() {
         CircuitPlayground.strip.setPixelColor(i,150, 0, 0); 
       light = true;
       dark = false;
+      Serial.println("loght");
     }
+    delay(3000);
   }
+  
   
 
 
