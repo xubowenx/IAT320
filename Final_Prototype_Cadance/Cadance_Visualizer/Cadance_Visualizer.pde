@@ -15,6 +15,16 @@ color[] presets = {
 
 int currPreset = 0;
 
+ParticleVisualizer particleVis = new ParticleVisualizer();
+MetaMatterVisualizer metaVis = new MetaMatterVisualizer();
+
+final int PARTICLE = 0;
+final int BLANK = 1;
+
+int[] screens = {PARTICLE, BLANK};
+
+int screen = 0;
+
 void setup() {
   size(600, 600);
 
@@ -24,8 +34,10 @@ void setup() {
   
   background(0);
   
-  initializeParticles();
+  particleVis.initialize();
 }
+
+float changeAcc;
 
 void draw() {
   while (myPort.available() > 0) {
@@ -40,11 +52,34 @@ void draw() {
     z = nums[3];
     acc = nums[4];
   }
+  
+  changeAcc = diffAcc();
 
   println("X: " + x);
   println("Y: " + y);
   println("Z: " + z);
   println("Total: " + acc);
+    println("Diff: " + diffAcc());
+
   
-  updateParticles();
+  switch (screen) {
+    case(PARTICLE):
+     particleVis.display();
+     break;
+     
+    case(BLANK):
+     metaVis.display();
+     break;
+  }
+}
+
+  boolean moving(){
+    return acc > 16;
+  }
+
+void keyPressed(){
+  if (key == CODED){
+    if (keyCode == RIGHT) screen = (screen + 1) % screens.length;
+    if (keyCode == LEFT) screen = ((screen - 1) + screens.length) % screens.length;
+  }
 }
