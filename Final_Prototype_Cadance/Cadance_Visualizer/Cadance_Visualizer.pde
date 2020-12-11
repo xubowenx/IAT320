@@ -25,21 +25,29 @@ int[] screens = {PARTICLE, BLANK};
 
 int screen = 0;
 
+Button left, right;
+
+float lastPress;
+
 void setup() {
   size(600, 600);
 
   printArray(Serial.list());
   myPort = new Serial(this, Serial.list()[1], 9600);
   myPort.bufferUntil('\n');
-  
+
   background(0);
-  
+
   particleVis.initialize();
+
+  left = new Button("left", width-80, height-40);
+  right = new Button("right", width-40, height-40);
 }
 
 float changeAcc;
 
 void draw() {
+  background(0);
   while (myPort.available() > 0) {
     data = myPort.readStringUntil('\n');
   }
@@ -52,34 +60,39 @@ void draw() {
     z = nums[3];
     acc = nums[4];
   }
-  
-  //changeAcc = diffAcc();
 
   println("X: " + x);
   println("Y: " + y);
   println("Z: " + z);
   println("Total: " + acc);
-    //println("Diff: " + diffAcc());
+  //println("Diff: " + diffAcc());
 
-  
   switch (screen) {
     case(PARTICLE):
-     particleVis.display();
-     break;
-     
+    particleVis.display();
+    break;
+
     case(BLANK):
-     metaVis.display();
-     break;
+    metaVis.display();
+    break;
   }
+
+  left.display();
+  right.display();
 }
 
-  boolean moving(){
-    return acc > 16;
-  }
+boolean moving() {
+  return acc > 16;
+}
 
-void keyPressed(){
-  if (key == CODED){
+void keyPressed() {
+  if (key == CODED) {
     if (keyCode == RIGHT) screen = (screen + 1) % screens.length;
     if (keyCode == LEFT) screen = ((screen - 1) + screens.length) % screens.length;
   }
+}
+
+void mouseReleased() {
+  if (left.pressed()) screen = (screen + 1) % screens.length;
+  if (right.pressed()) screen = ((screen - 1) + screens.length) % screens.length;
 }

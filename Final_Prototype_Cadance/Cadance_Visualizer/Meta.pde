@@ -24,20 +24,13 @@ class MetaMatterVisualizer implements Visualizer {
   float zoff;
 
   void display() {
-
-    //newAcc = map(acc, 9.8, 60, 0, 3);
     if (moving()) {
-      amp += 0.05;
-      iter += 0.05;
-      
+      grow();
     } else {
-      if (amp >= 3 && iter >= 10) {
-        amp -= 0.025;
-        iter -= 0.025;
+      if (amp >= 1 && iter >= 5) {
+        shrink();
       }
     }
-
-    background(0, 10);
 
     color from = presets[currPreset];
     color to;
@@ -56,7 +49,7 @@ class MetaMatterVisualizer implements Visualizer {
       to = presets[currPreset];
     }
 
-
+    pushMatrix();
     translate(width / 2, height / 2);
     time += speed;
     xOffset = sin(time * 0.05) * 100 + 5000;
@@ -77,15 +70,27 @@ class MetaMatterVisualizer implements Visualizer {
       }
       endShape(CLOSE);
     }
-
+    popMatrix();
     zoff += 0.02;
   }
+
+  void shrink() {
+    float speed = 0.01;
+    float max = 0.05;
+
+    amp -= speed;
+    iter -= speed;
+    
+    if (speed <= max) speed *= 1.1;
+  }
+  
+    void grow() {
+    float speed = 0.025;
+    float max = 0.1;
+
+    amp += speed;
+    iter += speed;
+    
+    if (speed <= max) speed *= 1.1;
+  }
 }
-
-//float lastAcc;
-
-//float diffAcc() {
-//  float diff = lastAcc / acc;
-//  lastAcc = acc;
-//  return diff;
-//}
