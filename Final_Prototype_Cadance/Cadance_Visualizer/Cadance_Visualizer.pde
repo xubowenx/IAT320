@@ -53,13 +53,13 @@ void draw() {
     acc = nums[4];
   }
   
-  changeAcc = diffAcc();
+  //changeAcc = diffAcc();
 
   println("X: " + x);
   println("Y: " + y);
   println("Z: " + z);
   println("Total: " + acc);
-    println("Diff: " + diffAcc());
+    //println("Diff: " + diffAcc());
 
   
   switch (screen) {
